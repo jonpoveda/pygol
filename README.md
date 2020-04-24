@@ -15,7 +15,13 @@ pipenv install
 To run it as a command-line program execute:
 
 ```shell script
-python pygol/game.py
+python pygol/pygol.py
+```
+
+Check help for extra parameters
+
+```shell script
+python pygol/pygol.py -h
 ```
 
 ## Interaction
