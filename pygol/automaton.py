@@ -8,7 +8,7 @@ Reference: `Jarkko Kari - Cellular Automata`__
 __ Automata_
 """
 
-from config import ALIVE
+from config import Cell
 
 
 def add_automaton_glider(game_state, x, y):
@@ -20,11 +20,11 @@ def add_automaton_glider(game_state, x, y):
           x
         xxx
     """
-    game_state[x + 1, y + 1] = ALIVE
-    game_state[x + 2, y + 2] = ALIVE
-    game_state[x + 2, y + 3] = ALIVE
-    game_state[x + 1, y + 3] = ALIVE
-    game_state[x, y + 3] = ALIVE
+    game_state[x + 1, y + 1] = Cell.ALIVE.value
+    game_state[x + 2, y + 2] = Cell.ALIVE.value
+    game_state[x + 2, y + 3] = Cell.ALIVE.value
+    game_state[x + 1, y + 3] = Cell.ALIVE.value
+    game_state[x, y + 3] = Cell.ALIVE.value
     return game_state
 
 
@@ -36,10 +36,10 @@ def add_automaton_square(game_state, x, y):
         xx
         xx
     """
-    game_state[x, y] = ALIVE
-    game_state[x, y + 1] = ALIVE
-    game_state[x + 1, y] = ALIVE
-    game_state[x + 1, y + 1] = ALIVE
+    game_state[x, y] = Cell.ALIVE.value
+    game_state[x, y + 1] = Cell.ALIVE.value
+    game_state[x + 1, y] = Cell.ALIVE.value
+    game_state[x + 1, y + 1] = Cell.ALIVE.value
     return game_state
 
 
@@ -50,9 +50,9 @@ def add_automaton_oscillator_line(game_state, x, y):
 
         xxx
     """
-    game_state[x, y] = ALIVE
-    game_state[x, y + 1] = ALIVE
-    game_state[x, y + 2] = ALIVE
+    game_state[x, y] = Cell.ALIVE.value
+    game_state[x, y + 1] = Cell.ALIVE.value
+    game_state[x, y + 2] = Cell.ALIVE.value
     return game_state
 
 
@@ -64,10 +64,10 @@ def add_automaton_oscillator_blinker(game_state, x, y):
          xxx
         xxx
     """
-    game_state[x + 1, y] = ALIVE
-    game_state[x + 2, y] = ALIVE
-    game_state[x + 3, y] = ALIVE
-    game_state[x, y + 1] = ALIVE
-    game_state[x + 1, y + 1] = ALIVE
-    game_state[x + 2, y + 1] = ALIVE
+    game_state[x + 1, y] = Cell.ALIVE.value
+    game_state[x + 2, y] = Cell.ALIVE.value
+    game_state[x + 3, y] = Cell.ALIVE.value
+    game_state[x, y + 1] = Cell.ALIVE.value
+    game_state[x + 1, y + 1] = Cell.ALIVE.value
+    game_state[x + 2, y + 1] = Cell.ALIVE.value
     return game_state

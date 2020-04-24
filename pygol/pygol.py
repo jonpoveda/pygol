@@ -4,19 +4,7 @@ from time import sleep
 import numpy as np
 import pygame
 
-from config import (
-    ALIVE,
-    ALIVE_COLOUR,
-    BG_COLOUR,
-    BOARD_HEIGHT,
-    BOARD_WIDTH,
-    CELL_HEIGHT,
-    CELL_WIDTH,
-    DEAD,
-    DEAD_COLOUR,
-    NUM_CELLS_X,
-    NUM_CELLS_Y,
-)
+from config import Board, Cell, Colour
 
 
 def neighbourhood(game_state, x, y):
@@ -25,14 +13,14 @@ def neighbourhood(game_state, x, y):
     Ref: https://en.wikipedia.org/wiki/Cellular_automaton
     """
     return (
-        game_state[(x - 1) % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
-        game_state[x % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
-        game_state[(x + 1) % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
-        game_state[(x - 1) % NUM_CELLS_X, y % NUM_CELLS_Y],
-        game_state[(x + 1) % NUM_CELLS_X, y % NUM_CELLS_Y],
-        game_state[(x - 1) % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
-        game_state[x % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
-        game_state[(x + 1) % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
+        game_state[(x - 1) % Board.NUM_CELLS_X, (y - 1) % Board.NUM_CELLS_Y],
+        game_state[x % Board.NUM_CELLS_X, (y - 1) % Board.NUM_CELLS_Y],
+        game_state[(x + 1) % Board.NUM_CELLS_X, (y - 1) % Board.NUM_CELLS_Y],
+        game_state[(x - 1) % Board.NUM_CELLS_X, y % Board.NUM_CELLS_Y],
+        game_state[(x + 1) % Board.NUM_CELLS_X, y % Board.NUM_CELLS_Y],
+        game_state[(x - 1) % Board.NUM_CELLS_X, (y + 1) % Board.NUM_CELLS_Y],
+        game_state[x % Board.NUM_CELLS_X, (y + 1) % Board.NUM_CELLS_Y],
+        game_state[(x + 1) % Board.NUM_CELLS_X, (y + 1) % Board.NUM_CELLS_Y],
     )
 
 
@@ -50,19 +38,19 @@ def update_cell(game_state, x, y):
     cell_state_next = cell_state
 
     # Any dead cell with three live neighbors becomes a live cell.
-    if cell_state == DEAD:
+    if cell_state == Cell.DEAD.value:
         if n_neigh_alive == 3:
-            cell_state_next = ALIVE
+            cell_state_next = Cell.ALIVE.value
 
     # Any live cell with two or three live neighbors survives.
-    elif cell_state == ALIVE:
+    elif cell_state == Cell.ALIVE.value:
         # Underpopulation (death by solitude)
         if n_neigh_alive < 2:
-            cell_state_next = DEAD
+            cell_state_next = Cell.DEAD.value
 
         # Overpopulation (death by starvation)
         elif n_neigh_alive > 3:
-            cell_state_next = DEAD
+            cell_state_next = Cell.DEAD.value
 
     return cell_state_next
 
@@ -71,16 +59,16 @@ def update_screen(screen, game_state, x, y):
     """ Update screen """
     cell_status = game_state[x, y]
     polygon = [
-        (x * CELL_WIDTH, y * CELL_HEIGHT),
-        ((x + 1) * CELL_WIDTH, y * CELL_HEIGHT),
-        ((x + 1) * CELL_WIDTH, (y + 1) * CELL_HEIGHT),
-        (x * CELL_WIDTH, (y + 1) * CELL_HEIGHT),
+        (x * Board.CELL_WIDTH, y * Board.CELL_HEIGHT),
+        ((x + 1) * Board.CELL_WIDTH, y * Board.CELL_HEIGHT),
+        ((x + 1) * Board.CELL_WIDTH, (y + 1) * Board.CELL_HEIGHT),
+        (x * Board.CELL_WIDTH, (y + 1) * Board.CELL_HEIGHT),
     ]
 
-    if cell_status == DEAD:
-        pygame.draw.polygon(screen, DEAD_COLOUR, polygon, width=1)
+    if cell_status == Cell.DEAD.value:
+        pygame.draw.polygon(screen, Colour.DEAD.value, polygon, width=1)
     else:
-        pygame.draw.polygon(screen, ALIVE_COLOUR, polygon, width=0)
+        pygame.draw.polygon(screen, Colour.ALIVE.value, polygon, width=0)
 
 
 def on_mouse_click(game_state):
@@ -88,21 +76,21 @@ def on_mouse_click(game_state):
     mouse = pygame.mouse.get_pressed()
     pos_x, pos_y = pygame.mouse.get_pos()
     cell_x, cell_y = (
-        int(np.floor(pos_x / CELL_WIDTH)),
-        int(np.floor(pos_y / CELL_HEIGHT)),
+        int(np.floor(pos_x / Board.CELL_WIDTH)),
+        int(np.floor(pos_y / Board.CELL_HEIGHT)),
     )
     game_state[cell_x, cell_y] = not mouse[2]
     return game_state
 
 
 def run(screen):
-    screen.fill(BG_COLOUR)
-    game_state = np.random.randint(0, 2, (NUM_CELLS_X, NUM_CELLS_Y))
+    screen.fill(Colour.BG.value)
+    game_state = np.random.randint(0, 2, (Board.NUM_CELLS_X, Board.NUM_CELLS_Y))
 
     pause = False
     while True:
         new_game_state = np.copy(game_state)
-        screen.fill(BG_COLOUR)
+        screen.fill(Colour.BG.value)
 
         # Allow keyboard and mouse interactions
         ev = pygame.event.get()
@@ -114,8 +102,8 @@ def run(screen):
                 new_game_state = on_mouse_click(new_game_state)
 
         # Update all cells
-        for y in range(0, NUM_CELLS_X):
-            for x in range(0, NUM_CELLS_Y):
+        for y in range(0, Board.NUM_CELLS_X):
+            for x in range(0, Board.NUM_CELLS_Y):
                 if not pause:
                     new_game_state[x, y] = update_cell(game_state, x, y)
 
@@ -129,5 +117,5 @@ def run(screen):
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((BOARD_HEIGHT, BOARD_WIDTH))
+    screen = pygame.display.set_mode((Board.HEIGHT, Board.WIDTH))
     run(screen)
