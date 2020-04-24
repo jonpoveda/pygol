@@ -4,6 +4,12 @@ from time import sleep
 import numpy as np
 import pygame
 
+from automaton import (
+    add_automaton_glider,
+    add_automaton_oscillator_blinker,
+    add_automaton_oscillator_line,
+    add_automaton_square,
+)
 from config import Board, Cell, Colour
 
 
@@ -93,9 +99,18 @@ def random_state():
     )
 
 
+def populate_with_automata():
+    game_state = np.zeros((Board.NUM_CELLS_X, Board.NUM_CELLS_Y))
+    game_state = add_automaton_oscillator_line(game_state, 2, 2)
+    game_state = add_automaton_square(game_state, 12, 2)
+    game_state = add_automaton_oscillator_blinker(game_state, 2, 12)
+    game_state = add_automaton_glider(game_state, 12, 12)
+    return game_state
+
+
 def run(screen):
     clear_screen(screen)
-    game_state = random_state()
+    game_state = populate_with_automata()
 
     pause = False
     stop = False
