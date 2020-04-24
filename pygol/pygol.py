@@ -83,14 +83,18 @@ def on_mouse_click(game_state):
     return game_state
 
 
-def run(screen):
+def clear_screen(screen):
     screen.fill(Colour.BG.value)
+
+
+def run(screen):
+    clear_screen(screen)
     game_state = np.random.randint(0, 2, (Board.NUM_CELLS_X, Board.NUM_CELLS_Y))
 
     pause = False
     while True:
         new_game_state = np.copy(game_state)
-        screen.fill(Colour.BG.value)
+        clear_screen(screen)
 
         # Allow keyboard and mouse interactions
         ev = pygame.event.get()
