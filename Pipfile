@@ -8,6 +8,8 @@ black = "==19.10b0"
 pre-commit = "*"
 
 [packages]
+numpy = "*"
+pygame = "==2.0.0.dev6"
 
 [requires]
 python_version = "3.8"
