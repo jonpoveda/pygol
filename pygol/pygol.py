@@ -4,18 +4,19 @@ from time import sleep
 import numpy as np
 import pygame
 
-from config import ALIVE, DEAD
-
-# Board configuration
-height, width = 1024, 1024
-num_cells_x, num_cells_y = 25, 25
-cell_height = height / num_cells_y
-cell_width = width / num_cells_x
-
-# Colour definitions
-background_colour = 25, 25, 25
-dead_colour = 128, 128, 128
-alive_colour = 255, 255, 255
+from config import (
+    ALIVE,
+    ALIVE_COLOUR,
+    BG_COLOUR,
+    BOARD_HEIGHT,
+    BOARD_WIDTH,
+    CELL_HEIGHT,
+    CELL_WIDTH,
+    DEAD,
+    DEAD_COLOUR,
+    NUM_CELLS_X,
+    NUM_CELLS_Y,
+)
 
 
 def neighbourhood(game_state, x, y):
@@ -24,14 +25,14 @@ def neighbourhood(game_state, x, y):
     Ref: https://en.wikipedia.org/wiki/Cellular_automaton
     """
     return (
-        game_state[(x - 1) % num_cells_x, (y - 1) % num_cells_y],
-        game_state[x % num_cells_x, (y - 1) % num_cells_y],
-        game_state[(x + 1) % num_cells_x, (y - 1) % num_cells_y],
-        game_state[(x - 1) % num_cells_x, y % num_cells_y],
-        game_state[(x + 1) % num_cells_x, y % num_cells_y],
-        game_state[(x - 1) % num_cells_x, (y + 1) % num_cells_y],
-        game_state[x % num_cells_x, (y + 1) % num_cells_y],
-        game_state[(x + 1) % num_cells_x, (y + 1) % num_cells_y],
+        game_state[(x - 1) % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
+        game_state[x % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
+        game_state[(x + 1) % NUM_CELLS_X, (y - 1) % NUM_CELLS_Y],
+        game_state[(x - 1) % NUM_CELLS_X, y % NUM_CELLS_Y],
+        game_state[(x + 1) % NUM_CELLS_X, y % NUM_CELLS_Y],
+        game_state[(x - 1) % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
+        game_state[x % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
+        game_state[(x + 1) % NUM_CELLS_X, (y + 1) % NUM_CELLS_Y],
     )
 
 
@@ -70,16 +71,16 @@ def update_screen(screen, game_state, x, y):
     """ Update screen """
     cell_status = game_state[x, y]
     polygon = [
-        (x * cell_width, y * cell_height),
-        ((x + 1) * cell_width, y * cell_height),
-        ((x + 1) * cell_width, (y + 1) * cell_height),
-        (x * cell_width, (y + 1) * cell_height),
+        (x * CELL_WIDTH, y * CELL_HEIGHT),
+        ((x + 1) * CELL_WIDTH, y * CELL_HEIGHT),
+        ((x + 1) * CELL_WIDTH, (y + 1) * CELL_HEIGHT),
+        (x * CELL_WIDTH, (y + 1) * CELL_HEIGHT),
     ]
 
     if cell_status == DEAD:
-        pygame.draw.polygon(screen, dead_colour, polygon, width=1)
+        pygame.draw.polygon(screen, DEAD_COLOUR, polygon, width=1)
     else:
-        pygame.draw.polygon(screen, alive_colour, polygon, width=0)
+        pygame.draw.polygon(screen, ALIVE_COLOUR, polygon, width=0)
 
 
 def on_mouse_click(game_state):
@@ -87,21 +88,21 @@ def on_mouse_click(game_state):
     mouse = pygame.mouse.get_pressed()
     pos_x, pos_y = pygame.mouse.get_pos()
     cell_x, cell_y = (
-        int(np.floor(pos_x / cell_width)),
-        int(np.floor(pos_y / cell_height)),
+        int(np.floor(pos_x / CELL_WIDTH)),
+        int(np.floor(pos_y / CELL_HEIGHT)),
     )
     game_state[cell_x, cell_y] = not mouse[2]
     return game_state
 
 
 def run(screen):
-    screen.fill(background_colour)
-    game_state = np.random.randint(0, 2, (num_cells_x, num_cells_y))
+    screen.fill(BG_COLOUR)
+    game_state = np.random.randint(0, 2, (NUM_CELLS_X, NUM_CELLS_Y))
 
     pause = False
     while True:
         new_game_state = np.copy(game_state)
-        screen.fill(background_colour)
+        screen.fill(BG_COLOUR)
 
         # Allow keyboard and mouse interactions
         ev = pygame.event.get()
@@ -113,8 +114,8 @@ def run(screen):
                 new_game_state = on_mouse_click(new_game_state)
 
         # Update all cells
-        for y in range(0, num_cells_x):
-            for x in range(0, num_cells_y):
+        for y in range(0, NUM_CELLS_X):
+            for x in range(0, NUM_CELLS_Y):
                 if not pause:
                     new_game_state[x, y] = update_cell(game_state, x, y)
 
@@ -128,5 +129,5 @@ def run(screen):
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((height, width))
+    screen = pygame.display.set_mode((BOARD_HEIGHT, BOARD_WIDTH))
     run(screen)
