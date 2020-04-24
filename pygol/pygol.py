@@ -83,6 +83,18 @@ def update_screen(screen, game_state, x, y):
         pygame.draw.polygon(screen, alive_colour, polygon, width=0)
 
 
+def on_mouse_click(game_state):
+    """ Revive a cell with left-click and kill a cell with right-click """
+    mouse = pygame.mouse.get_pressed()
+    pos_x, pos_y = pygame.mouse.get_pos()
+    cell_x, cell_y = (
+        int(np.floor(pos_x / cell_width)),
+        int(np.floor(pos_y / cell_height)),
+    )
+    game_state[cell_x, cell_y] = not mouse[2]
+    return game_state
+
+
 def run(screen):
     screen.fill(background_colour)
     game_state = np.random.randint(0, 2, (num_cells_x, num_cells_y))
@@ -97,6 +109,9 @@ def run(screen):
         for event in ev:
             if event.type == pygame.KEYDOWN:
                 pause = not pause
+
+            if sum(pygame.mouse.get_pressed()):
+                new_game_state = on_mouse_click(new_game_state)
 
         # Update all cells
         for y in range(0, num_cells_x):

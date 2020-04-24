@@ -21,7 +21,9 @@ python pygol/game.py
 ## Interaction
 
 - You can pause and resume the game pressing any key in your keyboard
-
+- You can change cell state (alive, dead) using the mouse:
+    - Left-click for setting a cell alive
+    - Right-click for setting a cell dead
 
 [wiki-tgol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 [pipenv-doc]: https://pipenv.pypa.io/en/latest/
