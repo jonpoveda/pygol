@@ -4,6 +4,8 @@ from time import sleep
 import numpy as np
 import pygame
 
+from pygol.config import ALIVE, DEAD
+
 # Board configuration
 height, width = 1024, 1024
 num_cells_x, num_cells_y = 25, 25
@@ -14,9 +16,6 @@ cell_width = width / num_cells_x
 background_colour = 25, 25, 25
 dead_colour = 128, 128, 128
 alive_colour = 255, 255, 255
-
-# Cell status
-dead, alive = 0, 1
 
 
 def neighbourhood(game_state, x, y):
@@ -50,19 +49,19 @@ def update_cell(game_state, x, y):
     cell_state_next = cell_state
 
     # Any dead cell with three live neighbors becomes a live cell.
-    if cell_state == dead:
+    if cell_state == DEAD:
         if n_neigh_alive == 3:
-            cell_state_next = alive
+            cell_state_next = ALIVE
 
     # Any live cell with two or three live neighbors survives.
-    elif cell_state == alive:
+    elif cell_state == ALIVE:
         # Underpopulation (death by solitude)
         if n_neigh_alive < 2:
-            cell_state_next = dead
+            cell_state_next = DEAD
 
         # Overpopulation (death by starvation)
         elif n_neigh_alive > 3:
-            cell_state_next = dead
+            cell_state_next = DEAD
 
     return cell_state_next
 
@@ -77,7 +76,7 @@ def update_screen(screen, game_state, x, y):
         (x * cell_width, (y + 1) * cell_height),
     ]
 
-    if cell_status == dead:
+    if cell_status == DEAD:
         pygame.draw.polygon(screen, dead_colour, polygon, width=1)
     else:
         pygame.draw.polygon(screen, alive_colour, polygon, width=0)
