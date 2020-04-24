@@ -4,7 +4,7 @@ from time import sleep
 import numpy as np
 import pygame
 
-from pygol.config import ALIVE, DEAD
+from config import ALIVE, DEAD
 
 # Board configuration
 height, width = 1024, 1024
