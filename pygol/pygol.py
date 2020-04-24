@@ -98,7 +98,8 @@ def run(screen):
     game_state = random_state()
 
     pause = False
-    while True:
+    stop = False
+    while not stop:
         new_game_state = np.copy(game_state)
         clear_screen(screen)
 
@@ -107,6 +108,9 @@ def run(screen):
         for event in ev:
             if event.type == pygame.KEYDOWN:
                 pause = not pause
+
+                if event.key == pygame.K_q:
+                    stop = True
 
             if sum(pygame.mouse.get_pressed()):
                 new_game_state = on_mouse_click(new_game_state)
@@ -129,3 +133,4 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((Board.HEIGHT, Board.WIDTH))
     run(screen)
+    exit(0)

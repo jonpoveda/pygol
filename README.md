@@ -20,6 +20,7 @@ python pygol/game.py
 
 ## Interaction
 
+- You can quit the game by pressing `q`
 - You can pause and resume the game pressing any key in your keyboard
 - You can change cell state (alive, dead) using the mouse:
     - Left-click for setting a cell alive
