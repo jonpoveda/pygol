@@ -87,9 +87,15 @@ def clear_screen(screen):
     screen.fill(Colour.BG.value)
 
 
+def random_state():
+    return np.random.choice(
+        (Cell.ALIVE.value, Cell.DEAD.value), (Board.NUM_CELLS_X, Board.NUM_CELLS_Y)
+    )
+
+
 def run(screen):
     clear_screen(screen)
-    game_state = np.random.randint(0, 2, (Board.NUM_CELLS_X, Board.NUM_CELLS_Y))
+    game_state = random_state()
 
     pause = False
     while True:
