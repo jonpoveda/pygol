@@ -87,14 +87,23 @@ def run(screen):
     screen.fill(background_colour)
     game_state = np.random.randint(0, 2, (num_cells_x, num_cells_y))
 
+    pause = False
     while True:
         new_game_state = np.copy(game_state)
         screen.fill(background_colour)
 
+        # Allow keyboard and mouse interactions
+        ev = pygame.event.get()
+        for event in ev:
+            if event.type == pygame.KEYDOWN:
+                pause = not pause
+
         # Update all cells
         for y in range(0, num_cells_x):
             for x in range(0, num_cells_y):
-                new_game_state[x, y] = update_cell(game_state, x, y)
+                if not pause:
+                    new_game_state[x, y] = update_cell(game_state, x, y)
+
                 update_screen(screen, game_state, x, y)
 
         # Update game state

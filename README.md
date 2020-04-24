@@ -18,5 +18,10 @@ To run it as a command-line program execute:
 python pygol/game.py
 ```
 
+## Interaction
+
+- You can pause and resume the game pressing any key in your keyboard
+
+
 [wiki-tgol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 [pipenv-doc]: https://pipenv.pypa.io/en/latest/
